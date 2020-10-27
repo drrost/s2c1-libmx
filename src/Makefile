@@ -2,7 +2,7 @@
 #                             Editable options                                #
 ###############################################################################
 CC = clang
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -I./inc
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic -I./inc -I./inc/private
 
 # Folders
 SRC=src
@@ -10,7 +10,7 @@ OBJ=obj
 
 BINARY = libmx.a
 
-CFILES = $(wildcard src/*.c) $(wildcard src/*/*.c)
+CFILES = $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c)
 OBJ_DIR = obj
 
 ###############################################################################

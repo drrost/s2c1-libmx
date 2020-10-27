@@ -4,7 +4,6 @@
 
 #include <libmx.h>
 #include <unistd.h>
-#include <stdlib.h>
 
 static int get_delim_index(char *buff, char delim) {
     int len = mx_strlen(buff);
@@ -55,9 +54,7 @@ static char *read_till_delim_or_eof(t_fd_node *node, char delim, bool *eof) {
             node->last_buff[delim_index] = 0;
             node->last_delim_index = delim_index + 1;
         }
-        char *old_result = result;
-        result = mx_strjoin(result, node->last_buff);
-        free(old_result);
+        mx_str_append(&result, node->last_buff);
         if (delim_index != -1)
             return result;
     }
@@ -70,9 +67,12 @@ int mx_read_line(char **lineptr, size_t buf_size, char delim, const int fd) {
         return -2;
 
     static t_list *fd_list = 0;
+    static bool eof = false;
+    if (eof)
+        return 0;
+
     t_fd_node *node = mx_add_fd_data(&fd_list, fd, buf_size);
 
-    bool eof = false;
     *lineptr = read_till_delim_or_eof(node, delim, &eof);
 
     if (eof)
